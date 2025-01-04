@@ -37,6 +37,11 @@
     </ul>
   </li>
 </ul>
+## Обновления:
+### 04.01.25 Добавил пагинацию 
+![image](https://github.com/user-attachments/assets/ef9baa53-d4e5-4376-92c4-7aa45a862617)
+
+
 <h1>Функционал сайта:</h1>
 <h3>1) Главная страница: на ней находится весь список товаров. </h5><br/>
 <img src="https://github.com/user-attachments/assets/2cf88a1f-0ed9-4ef4-9a91-2dc06146f27c" />
