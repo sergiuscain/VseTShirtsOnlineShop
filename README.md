@@ -39,7 +39,7 @@
 </ul>
 <h2> Обновления:</h2>
 ### 04.01.25 Добавил пагинацию 
-![image](https://github.com/user-attachments/assets/ef9baa53-d4e5-4376-92c4-7aa45a862617)
+<img src="https://github.com/user-attachments/assets/ef9baa53-d4e5-4376-92c4-7aa45a862617" />
 
 
 <h1>Функционал сайта:</h1>
