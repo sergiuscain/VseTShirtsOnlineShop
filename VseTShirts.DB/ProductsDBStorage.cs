@@ -45,10 +45,22 @@ namespace VseTShirts.DB
         }
 
 
+        public async Task<List<Product>>? GetAllAsync(int? page, int pageSize)
+        {
+            // Установка номера страницы по умолчанию
+            int currentPage = page ?? 1;
+
+            return await _dbContext.Products
+                .Include(p => p.Images)
+                .Include(x => x.CartPositions)
+                .Skip((currentPage - 1) * pageSize) // Пропустить элементы предыдущих страниц
+                .Take(pageSize) // Взять только нужное количество элементов
+                .ToListAsync();
+        }
         public async Task<List<Product>>? GetAllAsync() => await _dbContext.Products
-            .Include(p =>p.Images)
-            .Include(x=>x.CartPositions)
-            .ToListAsync();
+                .Include(p => p.Images)
+                .Include(x => x.CartPositions)
+                .ToListAsync();
 
         public async Task<Product> GetByIdAsync(Guid id) => await _dbContext.Products
             .Include(p=>p.Images)
@@ -206,6 +218,17 @@ namespace VseTShirts.DB
             var products = await _dbContext.Products.Where(p => p.Id == id).FirstAsync();
             products.NameOfCollection = collectionName;
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> GetPageCount(int pageSize)
+        {
+            if (pageSize <= 0)
+            {
+                throw new ArgumentException("Размер страницы должен быть больше нуля.", nameof(pageSize));
+            }
+
+            var count = await _dbContext.Products.CountAsync();
+            return (int)Math.Ceiling((double)count / pageSize); // Округление вверх
         }
     }
 }   

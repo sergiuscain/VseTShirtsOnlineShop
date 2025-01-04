@@ -2,6 +2,7 @@
 {
     public static class Data
     {
+        public static int pageSize = 21;
         public static List<string> Gender = new List<string>
         {
 

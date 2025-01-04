@@ -12,6 +12,8 @@ namespace VseTShirts.Models
         public List<string> Gender { get; set; }
         public List<string> Categories { get; set; }
         public bool IsActiveFilters { get; set; }
+        public int PageCount { get; set; }
+        public int Page {  get; set; }
         public HomeIndexViewModel()
         {
             Colors = Helpers.Data.Color;

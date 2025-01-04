@@ -5,4 +5,36 @@
 <div class="row">
     @await Html.PartialAsync("CollectionLeftMenu", Model.CollectionsList)
     @await Html.PartialAsync("ProductsComponent", Model)
+
+</div>
+<div class="pagination">
+    @if (Model.PageCount > 1)
+    {
+        <ul class="pagination-list">
+            @if (Model.Page > 1)
+            {
+                <li>
+                    <a href="@Url.Action("Index", new { page = Model.Page - 1 })" aria-label="Previous">
+                        &laquo; Назад
+                    </a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="@(Model.Page == i ? "active" : "")">
+                    <a href="@Url.Action("Index", new { page = i })">@i</a>
+                </li>
+            }
+
+            @if (Model.Page < Model.PageCount)
+            {
+                <li>
+                    <a href="@Url.Action("Index", new { page = Model.Page + 1 })" aria-label="Next">
+                        Вперед &raquo;
+                    </a>
+                </li>
+            }
+        </ul>
+    }
 </div>

@@ -10,6 +10,7 @@ namespace VseTShirts
         Task AddAsync(Product product);
         Task QuantityIncreaseAsync(Guid Id);
         Task EditProductAsync(Guid Id, Product newProduct);
+        Task<List<Product>> GetAllAsync(int? page, int pageSize);
         Task<List<Product>> GetAllAsync();
         Task<Product> GetByNameAsync(string name);
         Task DeleteAllAsync();
@@ -19,5 +20,6 @@ namespace VseTShirts
         Task RemoveCollectionFromProductAsync(string name, Guid productId);
         Task DeleteProductFromCollectionAsync(Guid id, string collectionName);
         Task AddProductToCollectionAsync(Guid id, string collectionName);
+        Task<int> GetPageCount(int pageSize);
     }
 }

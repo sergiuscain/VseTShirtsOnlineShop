@@ -20,3 +20,31 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.pagination-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+    .pagination-list li {
+        margin: 0 5px;
+    }
+
+    .pagination-list a {
+        text-decoration: none;
+        padding: 8px 12px;
+        border: 1px solid #007bff;
+        color: #007bff;
+    }
+
+    .pagination-list .active a {
+        background-color: #007bff;
+        color: white;
+    }

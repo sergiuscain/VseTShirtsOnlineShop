@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VseTShirts.DB;
 using VseTShirts.DB.Models;
+using VseTShirts.Helpers;
 using VseTShirts.Models;
 using VseTShirts.Services;
 
@@ -28,8 +29,10 @@ namespace VseTShirts.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
+            page = page ?? 1;
+            int pageCount = await _productStorage.GetPageCount(Data.pageSize);
             var filters = new FiltersViewModel
             {
                 Category = "ALL",
@@ -42,9 +45,9 @@ namespace VseTShirts.Controllers
                 MinQuantity = 0,
                 MaxQuantity = 0,
             };
-            var productsViewModel = (await _productStorage.GetAllAsync()).ToViewModel();
+            var productsViewModel = (await _productStorage.GetAllAsync(page, Data.pageSize)).ToViewModel();
             List<CollectionViewModel> collections = (await _collectionsStorage.GetAllAsync()).Select(c => c.ToViewModel()).ToList();
-            var homeIndexModel = new HomeIndexViewModel { Products = productsViewModel, Filters = filters, CollectionsList = collections, IsActiveFilters = false};
+            var homeIndexModel = new HomeIndexViewModel { Products = productsViewModel, Filters = filters, CollectionsList = collections, IsActiveFilters = false, PageCount = pageCount, Page = (int)page };
             return View(homeIndexModel);
         }
 
