@@ -50,19 +50,19 @@ namespace VseTShirts.DB
             .Include(x=>x.CartPositions)
             .ToListAsync();
 
-        public async Task<Product> GetByIdAsync(Guid id)
-        {
-            return await _dbContext.Products.Include(p=>p.Images).FirstOrDefaultAsync(product => product.Id == id);
-        }
+        public async Task<Product> GetByIdAsync(Guid id) => await _dbContext.Products
+            .Include(p=>p.Images)
+            .FirstOrDefaultAsync(product => product.Id == id);
 
-        public async Task<Product> GetByNameAsync(string name)
-        {
-            return await _dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(product => product.Name == name);
-        }
+        public async Task<Product> GetByNameAsync(string name) => await _dbContext.Products
+            .Include(p => p.Images)
+            .FirstOrDefaultAsync(product => product.Name == name);
 
         public async Task QuantitiReduceAsync(Guid Id)
         {
-            var product = await _dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == Id);
+            var product = await _dbContext.Products
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Id == Id);
             if ( product.Quantity > 0)
                 product.Quantity--;
             if (product.Quantity <= 0)
@@ -75,7 +75,9 @@ namespace VseTShirts.DB
 
         public async Task QuantityIncreaseAsync(Guid Id)
         {
-            var product = await _dbContext.Products.Include(p => p.Images).FirstOrDefaultAsync(p => p.Id == Id);
+            var product = await _dbContext.Products
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Id == Id);
             if (product != null)
                 product.Quantity++;
             await _dbContext.SaveChangesAsync();
@@ -165,7 +167,8 @@ namespace VseTShirts.DB
 
         public async Task<List<Product>> GetByCollectionAsync(string nameOfCollection)
         {
-            var products = await _dbContext.Products.Where(p => p.NameOfCollection == nameOfCollection)
+            var products = await _dbContext.Products
+                .Where(p => p.NameOfCollection == nameOfCollection)
                 .Include(p => p.Images)
                 .ToListAsync();
             return products;
@@ -173,7 +176,9 @@ namespace VseTShirts.DB
 
         public async Task RemoveCollectionFromProductsAsync(string name)
         {
-            var products = await _dbContext.Products.Where(p => p.NameOfCollection == name).ToListAsync();
+            var products = await _dbContext.Products
+                .Where(p => p.NameOfCollection == name)
+                .ToListAsync();
             foreach(var product in products)
             {
                 product.NameOfCollection = "Не задана";
