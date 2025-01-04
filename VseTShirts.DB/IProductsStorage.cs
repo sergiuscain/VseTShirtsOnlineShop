@@ -21,5 +21,6 @@ namespace VseTShirts
         Task DeleteProductFromCollectionAsync(Guid id, string collectionName);
         Task AddProductToCollectionAsync(Guid id, string collectionName);
         Task<int> GetPageCount(int pageSize);
+        int calculatePageCount(int pageSize, int productCount);
     }
 }

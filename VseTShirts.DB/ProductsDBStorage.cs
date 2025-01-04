@@ -230,6 +230,14 @@ namespace VseTShirts.DB
             var count = await _dbContext.Products.CountAsync();
             return (int)Math.Ceiling((double)count / pageSize); // Округление вверх
         }
+        public int calculatePageCount(int pageSize, int productCount)
+        {
+            if (pageSize <= 0)
+            {
+                throw new ArgumentException("Размер страницы должен быть больше нуля.", nameof(pageSize));
+            }
+            return (int)Math.Ceiling((double)productCount / pageSize); // Округление вверх
+        }
     }
 }   
     

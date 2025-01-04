@@ -6,6 +6,7 @@ namespace VseTShirts.Models
     {
         public List<ProductViewModel> Products { get; set; }
         public FiltersViewModel Filters { get; set; }
+        public string SearchString { get; set; }
         public List<CollectionViewModel> CollectionsList { get; set; }
         public List<string> Colors { get; set; }
         public List<string> Sizes { get; set; }

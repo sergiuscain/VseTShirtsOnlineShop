@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using VseTShirts.DB;
 using VseTShirts.DB.Models;
 using VseTShirts.Helpers;
@@ -84,13 +85,17 @@ namespace VseTShirts.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> SearchAsync(string serachTxt)
+        public async Task<IActionResult> SearchAsync(string serachTxt, int? page)
         {
+            page = page ?? 1;
             var products = await _productStorage.GetAllAsync();
             if (!string.IsNullOrEmpty(serachTxt)) 
                 products = products.Where(p => p.Name.ToLower().Contains(serachTxt.ToLower())).ToList();
+            int pageCount = _productStorage.calculatePageCount(Data.pageSize, products.Count);
+            products = products.Skip((int)(page - 1) * Data.pageSize)
+                .Take(Data.pageSize).ToList();
             List<CollectionViewModel> collections = (await _collectionsStorage.GetAllAsync()).Select(c => c.ToViewModel()).ToList();
-            var homeIndexViewModel = new HomeIndexViewModel { Products = products.ToViewModel(), CollectionsList = collections };
+            var homeIndexViewModel = new HomeIndexViewModel { Products = products.ToViewModel(), CollectionsList = collections, Page = (int)page, PageCount = pageCount, SearchString = serachTxt };
             return View("Index", homeIndexViewModel);
         }
         public async Task<IActionResult> FilterAsync(FiltersViewModel filters)
