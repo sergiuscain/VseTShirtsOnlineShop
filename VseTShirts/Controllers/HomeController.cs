@@ -5,6 +5,7 @@ using System.Diagnostics;
 using VseTShirts.DB;
 using VseTShirts.DB.Models;
 using VseTShirts.Models;
+using VseTShirts.Services;
 
 namespace VseTShirts.Controllers
 {
@@ -15,13 +16,15 @@ namespace VseTShirts.Controllers
         public readonly IComparedProductsStorage _comparedStorage;
         private readonly UserManager<User> _userManager;
         private readonly ICollectionsStorage _collectionsStorage;
+        private readonly IEmailService _emailService;
 
-        public HomeController(IProductsStorage productStorage, IComparedProductsStorage comparedStorage, UserManager<User> userManager, ICollectionsStorage collectionsStorage)
+        public HomeController(IProductsStorage productStorage, IComparedProductsStorage comparedStorage, UserManager<User> userManager, ICollectionsStorage collectionsStorage, IEmailService emailService)
         {
             _productStorage = productStorage;
             _comparedStorage = comparedStorage;
             _userManager = userManager;
             _collectionsStorage = collectionsStorage;
+            _emailService = emailService;
         }
 
 
@@ -113,6 +116,16 @@ namespace VseTShirts.Controllers
             List<CollectionViewModel> collections = (await _collectionsStorage.GetAllAsync()).Select(c => c.ToViewModel()).ToList();
             var homeIndexModel = new HomeIndexViewModel { Products = products, Filters = filters, CollectionsList = collections, IsActiveFilters = false };
             return View(homeIndexModel);
+        }
+
+        public async Task<IActionResult> SednEmail()
+        {
+            string to = "test@yandex.ru"; //Кому отправляем
+            string subject = "Это заголовок"; //Это заголовок письма
+            //А снизу пример тела письма в виде html документа
+            string htmlBodyMessage = "<!DOCTYPE html>\r\n<html lang=\"ru\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Тело письма</title>\r\n    <style>\r\n        body {\r\n            font-family: Arial, sans-serif;\r\n            background-color: #f4f4f4;\r\n            margin: 0;\r\n            padding: 20px;\r\n        }\r\n        .container {\r\n            max-width: 600px;\r\n            margin: auto;\r\n            background: #fff;\r\n            padding: 20px;\r\n            border-radius: 5px;\r\n            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\r\n        }\r\n        h1 {\r\n            color: #333;\r\n        }\r\n        p {\r\n            color: #555;\r\n        }\r\n        .button {\r\n            display: inline-block;\r\n            padding: 10px 20px;\r\n            background-color: #007BFF;\r\n            color: white;\r\n            text-decoration: none;\r\n            border-radius: 5px;\r\n        }\r\n        .button:hover {\r\n            background-color: #0056b3;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"container\">\r\n        <h1>Здравствуйте!</h1>\r\n        <p>Спасибо, что воспользовались нашим сервисом. Мы рады приветствовать вас!</p>\r\n        <p>Чтобы начать, нажмите на кнопку ниже:</p>\r\n        <a href=\"https://example.com\" class=\"button\">Начать</a>\r\n        <p>Если у вас есть вопросы, не стесняйтесь обращаться к нам.</p>\r\n        <p>С уважением,<br>Ваша команда</p>\r\n    </div>\r\n</body>\r\n</html>";
+            await _emailService.SendEmailAsync(to,subject, htmlBodyMessage);
+            return RedirectToAction("Index");
         }
     }
 }

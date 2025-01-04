@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using VseTShirts.DB.Models;
 using Microsoft.AspNetCore.Identity;
 using VseTShirts.Helpers;
+using VseTShirts.Services;
+using System.Configuration;
 
 namespace VseTShirts
 {
@@ -14,7 +16,7 @@ namespace VseTShirts
         {
 
             var builder = WebApplication.CreateBuilder(args);
-
+            var emailSettings = builder.Configuration.GetSection("EmailSettings");
             string connection = builder.Configuration.GetConnectionString("DefaultConnection");
             object value = builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer (connection));
             builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connection));
@@ -42,6 +44,13 @@ namespace VseTShirts
                 .ReadFrom.Configuration(context.Configuration)
                 .Enrich.WithProperty("ApplicationName", "Online Shop"));
             builder.Services.AddMemoryCache();
+            builder.Services.AddScoped<IEmailService>(provider =>
+                new EmailService(
+                    emailSettings["SmtpServer"],
+                    int.Parse(emailSettings["SmtpPort"]),
+                    emailSettings["SmtpUser"],
+                    emailSettings["SmtpPass"]
+                ));
 
 
             var app = builder.Build();
