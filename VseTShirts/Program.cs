@@ -41,6 +41,7 @@ namespace VseTShirts
             builder.Host.UseSerilog((context, configuration) => configuration
                 .ReadFrom.Configuration(context.Configuration)
                 .Enrich.WithProperty("ApplicationName", "Online Shop"));
+            builder.Services.AddMemoryCache();
 
 
             var app = builder.Build();
@@ -54,7 +55,13 @@ namespace VseTShirts
             }
 
             app.UseSerilogRequestLogging();
-
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Headers.Add("Cache-Control", "public,max-age=600");
+                }
+            });
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
