@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using VseTShirts.DB;
 using VseTShirts.DB.Models;
 
 namespace VseTShirts.Views.Shared.ViewComponents.CartViewComponents
 {
+    [Authorize]
     public class CalcFavoriteProductsCountViewComponent : ViewComponent
     {
         private readonly IFavoriteProductsStorage favoriteProductsStorage;
