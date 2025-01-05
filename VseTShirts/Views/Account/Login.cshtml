@@ -2,37 +2,45 @@
 
 <form method="post">
     <div class="col text-center  border-primary">
-         <div class="validation btn text-danger" asp-validation-summary="All"></div>
+        <div class="validation btn text-danger" asp-validation-summary="All"></div>
         <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-    <div>
-         <label asp-for="UserName" ><h5>Логин:</h5></label>
+        <div>
+            <label asp-for="UserName"><h5>Логин:</h5></label>
             <br />
-         <input class="col-3" asp-for="UserName"/>
+            <input class="col-3" asp-for="UserName" />
             <div><span asp-validation-for="UserName"></span></div>
-    </div>
+        </div>
 
-     <div>
-    <label asp-for="Password"><h5> Пароль:</h5></label>
-            <br />
-    <input class="col-3" type="password" asp-for="Password"/>
+        <div>
+            <label asp-for="Password"><h5> Пароль:</h5></label><br />
+            <input class="col-3" type="password" asp-for="Password" />
             <div><span asp-validation-for="Password"></span></div>
-    </div>
-     <div>
-         <label asp-for="isRemembMe">Запомнить меня:</label>
-         <input asp-for="isRemembMe" value="true" >
-     </div>
-     <div>
-        <button class="border-success col-3" type="submit" asp-area="" asp-controller="Account" asp-action="Login">Войти</button>
-     </div>
-     <div>
-        <a 
-        asp-area=""
-        asp-controller="Account"
-        asp-action="ResetPassword" class="btn shadow">Сброс пароля.</a>
-         <a class="btn shadow" 
-             asp-area=""
+        </div>
+        <div>
+            <label asp-for="isRemembMe">Запомнить меня:</label>
+            <input asp-for="isRemembMe" value="true">
+        </div>
+        <div>
+            <button class="border-success col-3" type="submit" asp-area="" asp-controller="Account" asp-action="Login">Войти</button>
+        </div>
+        <div>
+            <a asp-area=""
                asp-controller="Account"
-               asp-action="Register" target="_blank" asp-route-ReturnUrl = "@Model.ReturnUrl">Регистрация.</a>
+               asp-action="ResetPassword" class="btn shadow">
+                Сброс пароля.
+            </a>
+            <a class="btn shadow"
+               asp-area=""
+               asp-controller="Account"
+               asp-action="Register" target="_blank" asp-route-ReturnUrl="@Model.ReturnUrl">
+                Регистрация.
+            </a>
+            <a class="btn shadow"
+               asp-area=""
+               asp-controller="Account"
+               asp-action="YandexLogin" target="_blank" asp-route-ReturnUrl="@Model.ReturnUrl">
+                Войти через Яндекс
+            </a>
      </div>
 </div>
 </form>
