@@ -1,5 +1,4 @@
-﻿
-
+﻿using Microsoft.AspNetCore.Authentication;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,5 +15,6 @@ namespace VseTShirts.Models
         public string Password { get; set; }
         public bool isRemembMe { get; set; }
         public string ReturnUrl { get; set; }
+        public List<AuthenticationScheme> ExternalLogins { get; set; }
     }
 }
