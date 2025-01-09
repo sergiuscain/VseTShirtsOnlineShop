@@ -2,6 +2,9 @@
 {
     public static class Data
     {
+        public const string AdminRoleName = "admin";
+        public const string UserRoleName = "user";
+        public const string UserId = "UserId";
         public static int pageSize = 21;
         public static List<string> Gender = new List<string>
         {
