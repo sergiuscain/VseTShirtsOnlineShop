@@ -17,7 +17,7 @@
             <div><span asp-validation-for="Password"></span></div>
         </div>
         <div>
-            <input asp-for="ExternalLogins" value="@Model.ExternalLogins">
+            <input type="hidden" asp-for="ExternalLogins" value="@Model.ExternalLogins">
         </div>
         <div>
             <label asp-for="isRemembMe">Запомнить меня:</label>
