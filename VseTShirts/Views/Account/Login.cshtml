@@ -17,6 +17,9 @@
             <div><span asp-validation-for="Password"></span></div>
         </div>
         <div>
+            <input asp-for="ExternalLogins" value="@Model.ExternalLogins">
+        </div>
+        <div>
             <label asp-for="isRemembMe">Запомнить меня:</label>
             <input asp-for="isRemembMe" value="true">
         </div>
@@ -35,12 +38,11 @@
                asp-action="Register" target="_blank" asp-route-ReturnUrl="@Model.ReturnUrl">
                 Регистрация.
             </a>
-            <a class="btn shadow"
-               asp-area=""
-               asp-controller="Account"
-               asp-action="YandexLogin" target="_blank" asp-route-ReturnUrl="@Model.ReturnUrl">
-                Войти через Яндекс
-            </a>
+            <div>
+                @foreach (var provider in Model.ExternalLogins){
+                    <button type="submit" asp-controller="UserEntering" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" class="btn btn-primary" name="provider" value="@provider.Name">@provider.DisplayName</button>
+                }
+            </div>
      </div>
 </div>
 </form>
