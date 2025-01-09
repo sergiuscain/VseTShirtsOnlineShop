@@ -1,3 +1,27 @@
+using VseTShirts.Models;
+using VseTShirts.DB;
+using Serilog;
+using Microsoft.EntityFrameworkCore;
+using VseTShirts.DB.Models;
+using Microsoft.AspNetCore.Identity;
+using VseTShirts.Helpers;
+using VseTShirts.Services;
+using System.Configuration;
+
+namespace VseTShirts
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+
+            var builder = WebApplication.CreateBuilder(args);
+            var emailSettings = builder.Configuration.GetSection("EmailSettings");
+            string connection = builder.Configuration.GetConnectionString("DefaultConnection");
+            object value = builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer (connection));
+            builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connection));
+            builder.Services.AddIdentity<User, IdentityRole>()
+                           .AddEntityFrameworkStores<IdentityContext>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddTransient<ICollectionsStorage, CollectionsDBStorage>();
             builder.Services.AddTransient<ICartsStorage ,CartsDBStorage>();
@@ -35,6 +59,11 @@
                 {
                     options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+                })
+                .AddYandex(options =>
+                {
+                    options.ClientId = builder.Configuration["Authentication:Yandex:ClientId"];
+                    options.ClientSecret = builder.Configuration["Authentication:Yandex:ClientSecret"];
                 });
 
 
