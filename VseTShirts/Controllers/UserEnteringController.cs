@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Serilog.Core;
 using System.Security.Claims;
 using VseTShirts.DB.Models;
@@ -20,11 +21,11 @@ namespace VseTShirts.Controllers
         }
         public IActionResult ExternalLogin(string provider, string returnUrl)
         {
-            var redirectUrl = Url.Action("ExternalLoginCallvack", "UserEntering", new { ReturnUrl = returnUrl });
+            var redirectUrl = Url.Action("ExternalLoginCallback", "UserEntering", new { ReturnUrl = returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return Challenge(properties, provider);
         }
-        public async Task<IActionResult> ExternalLoginCallvack(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
@@ -64,9 +65,9 @@ namespace VseTShirts.Controllers
                         {
                             UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
                             Email = info.Principal.FindFirstValue(ClaimTypes.Email),
-                            FirstName = info.Principal.FindFirstValue(ClaimTypes.Name).Split(" ")[0],
-                            LastName = info.Principal.FindFirstValue(ClaimTypes.Name).Split(" ")[1],
-                            PhoneNumber = info.Principal.FindFirstValue(ClaimTypes.MobilePhone),
+                            FirstName = info.Principal.FindFirstValue(ClaimTypes.Name).Split(" ").FirstOrDefault() ?? "NoN",
+                            LastName = info.Principal.FindFirstValue(ClaimTypes.Name).Split(" ").LastOrDefault() ?? "NoN",
+                            PhoneNumber = info.Principal.FindFirstValue(ClaimTypes.MobilePhone) ?? "NoN",
                             AvatarURL = "/Images/Avatar/standart.png",
                             Status = UserStatus.Active.ToString(),
                             DateOfBirth = DateTime.Now,
