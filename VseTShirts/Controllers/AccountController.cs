@@ -4,6 +4,7 @@ using VseTShirts.DB.Models;
 using VseTShirts.DB;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
 namespace VseTShirts.Controllers
 {
@@ -13,11 +14,13 @@ namespace VseTShirts.Controllers
         private readonly UserManager<User> _usersManager;
         //private readonly IUsersManager  usersManager;
         private readonly SignInManager<User> _signInManager;
-        public AccountController(UserManager<User> usersManager, SignInManager<User> signInManager)
+        private readonly IAuthenticationSchemeProvider _authenticationSchemeProvider;
+        public AccountController(UserManager<User> usersManager, SignInManager<User> signInManager, IAuthenticationSchemeProvider authenticationSchemeProvider)
         {
            // this.usersManager = usersManager;
             _signInManager = signInManager;
             _usersManager = usersManager;
+            _authenticationSchemeProvider = authenticationSchemeProvider;
         }
         [Authorize]
         public IActionResult Index()
@@ -26,10 +29,11 @@ namespace VseTShirts.Controllers
             var userVM = user.ToViewModel();
             return View(userVM);
         }
-        public IActionResult Login(string returnUrl)
+        public async Task<IActionResult> Login(string returnUrl)
         {
-            if (returnUrl == null) returnUrl = "/Home";
-            return View(new LoginModel() { ReturnUrl = returnUrl});
+           
+            var externalSchemes = (await _authenticationSchemeProvider.GetAllSchemesAsync()).Where(s => s.DisplayName != null).ToList();
+            return View(new LoginModel() { ReturnUrl = returnUrl, ExternalLogins = externalSchemes });
         }
 
         [HttpPost]
@@ -112,6 +116,10 @@ namespace VseTShirts.Controllers
         public IActionResult ResetPassword()
         {
             return View();
+        }
+        public IActionResult HelloNewUser(string defaultPassword)
+        {
+            return View(new {defaultPassword });
         }
 
     }
